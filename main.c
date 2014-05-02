@@ -13,8 +13,45 @@
  */
 int main(int argc, char** argv) {
     
-    printf("Hello World!");
+    char opt;
+    short mode; //variable que indica en que modo se esta traballando
     
-    return (EXIT_SUCCESS);
+    do{
+        printf("\nModo de Operacion");
+        printf("\n===================");
+        printf("\n1)Monedas Infinitas");
+        printf("\n2)Monedas Limitadas");
+        printf("\n0)Salir");
+        printf("\nOpcion: ");
+        scanf("%c",&opt);//corregir fallo no menu
+        
+        switch(opt){
+            case '1'://Monedas Infinitas
+                
+                break;
+            case '2'://Monedas Limitadas
+                
+                break;
+            default:
+                printf("\nOpcion Erronea");
+                break;
+        }
+        
+    }while(opt != '0');
+    
+    return(EXIT_SUCCESS);
 }
 
+/** SOLICITAR MONEDAS
+ * Solicita un numero de monedas por pantalla
+ * 
+ * @params none
+ * 
+ * @return int - numero de monedas
+ */
+int solicitarMonedas(){
+    int monedas;
+    printf("\nIntroduzca o numero de monedas do que quere cambio: ");
+    scanf("%d",&monedas);
+    return monedas;
+}
