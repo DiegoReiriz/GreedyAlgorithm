@@ -24,8 +24,8 @@ int main(int argc, char** argv) {
      * Asignacion temporal de monedas
      */
     vectorP monedas,solucion;
-    crear(&monedas,7);
-    crear(&solucion,7);
+    crear(&monedas,8);
+    crear(&solucion,8);
     asignar(&monedas,0,200);
     asignar(&monedas,1,100);
     asignar(&monedas,2,50);
@@ -95,18 +95,19 @@ int solicitarMonedas() {
  */
 int cambioInf(int x, vectorP valor, vectorP *solucion) {
     int len,val,i,suma=0;
-    TELEMENTO tmp;
+    TELEMENTO temp;
     
     tamano(*solucion,&len);
     
     for (i = 0; i < len; i++) 
         asignar(solucion,i,0);
     
+    i=0;
     while (suma < x && i < len){
         recuperar(valor,i,&val);
         if (suma + val <= x) {
-            recuperar(solucion,i,&tmp);
-            asignar(solucion,i,tmp);
+            recuperar(&solucion,i,&temp);
+            asignar(solucion,i,temp++);
             suma += val;
         } else
             i++;
@@ -127,7 +128,7 @@ void imprimirVector(vectorP vec){
     tamano(vec,&len);
     
     printf("\n");
-    for(i=0;i<=len;i++){
+    for(i=0;i<len;i++){
         recuperar(vec,i,&aux);
         printf("\t%d",aux);
     }
