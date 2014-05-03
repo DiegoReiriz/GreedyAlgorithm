@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
     asignar(&monedas,5,5);
     asignar(&monedas,6,2);
     asignar(&monedas,7,1);
-    
+
     
     do {
         printf("\nModo de Operacion");
@@ -106,8 +106,8 @@ int cambioInf(int x, vectorP valor, vectorP *solucion) {
     while (suma < x && i < len){
         recuperar(valor,i,&val);
         if (suma + val <= x) {
-            recuperar(&solucion,i,&temp);
-            asignar(solucion,i,temp++);
+            recuperar(*solucion,i,&temp);
+            asignar(solucion,i,++temp);
             suma += val;
         } else
             i++;
@@ -130,6 +130,5 @@ void imprimirVector(vectorP vec){
     printf("\n");
     for(i=0;i<len;i++){
         recuperar(vec,i,&aux);
-        printf("\t%d",aux);
     }
 }
