@@ -1,13 +1,17 @@
 /* 
  * File:   main.c
- * Author: entakitos
+ * Author: Diego Reiriz Cores
  *
  * Created on 2 de mayo de 2014, 20:19
  */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "vectordinamico.h"
 
+int solicitarMonedas();
+void imprimirVector(vectorP vec);
+int cambioInf(int x, vectorP valor, vectorP *solucion);
 /*
  * 
  */
@@ -16,6 +20,22 @@ int main(int argc, char** argv) {
     char opt;
     short mode; //variable que indica en que modo se esta traballando
 
+    /*
+     * Asignacion temporal de monedas
+     */
+    vectorP monedas,solucion;
+    crear(&monedas,7);
+    crear(&solucion,7);
+    asignar(&monedas,0,200);
+    asignar(&monedas,1,100);
+    asignar(&monedas,2,50);
+    asignar(&monedas,3,20);
+    asignar(&monedas,4,10);
+    asignar(&monedas,5,5);
+    asignar(&monedas,6,2);
+    asignar(&monedas,7,1);
+    
+    
     do {
         printf("\nModo de Operacion");
         printf("\n===================");
@@ -28,7 +48,8 @@ int main(int argc, char** argv) {
 
         switch (opt) {
             case '1'://Monedas Infinitas
-                solicitarMonedas();
+                cambioInf(solicitarMonedas(),monedas,&solucion);
+                imprimirVector(solucion);
                 break;
             case '2'://Monedas Limitadas
                 solicitarMonedas();
@@ -43,6 +64,7 @@ int main(int argc, char** argv) {
 
     } while (opt != '0');
 
+    liberar(&monedas);
     return (EXIT_SUCCESS);
 }
 
@@ -60,8 +82,8 @@ int solicitarMonedas() {
     return monedas;
 }
 
-/** cambio
- * algoritmo voraz para dar o cambio
+/** cambioInf
+ * algoritmo voraz para dar o cambio con monedas infinitas
  * 
  * @param int - cantidad a devolver
  * @param vectorP - valor das monedas
@@ -71,18 +93,42 @@ int solicitarMonedas() {
  * si se devolve un vector vacio.
  * 
  */
-int cambio(int x, int valor[n], int solucion[n]) {
-    for (int i = 0; i < n; i++) solucion[i] = 0;
-    int i = 0, suma = 0;
-    while (suma < x && i < n)
-        if (suma + valor[i] <= x) {
-            solucion[i]++;
-            suma += valor[i];
+int cambioInf(int x, vectorP valor, vectorP *solucion) {
+    int len,val,i,suma=0;
+    TELEMENTO tmp;
+    
+    tamano(*solucion,&len);
+    
+    for (i = 0; i < len; i++) 
+        asignar(solucion,i,0);
+    
+    while (suma < x && i < len){
+        recuperar(valor,i,&val);
+        if (suma + val <= x) {
+            recuperar(solucion,i,&tmp);
+            asignar(solucion,i,tmp);
+            suma += val;
         } else
             i++;
+    }
     if (suma == x) return 1;
     else {
-        for (int i = 0; i < n; i++) solucion[i] = 0;
+        for (i = 0; i < len; i++) 
+            asignar(solucion,i,0);
         return 0;
+    }
+}
+
+
+void imprimirVector(vectorP vec){
+    int len,i;
+    TELEMENTO aux;
+    
+    tamano(vec,&len);
+    
+    printf("\n");
+    for(i=0;i<=len;i++){
+        recuperar(vec,i,&aux);
+        printf("\t%d",aux);
     }
 }
