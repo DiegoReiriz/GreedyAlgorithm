@@ -120,7 +120,10 @@ int cambioInf(int x, vectorP valor, vectorP *solucion) {
     }
 }
 
-
+/** imprimirVector
+ * Funcion que se encargr de imprimir por pantalla o contenido do vector que se lle pasa como argumento
+ * @param vectorP - vector a imprimir
+ */
 void imprimirVector(vectorP vec){
     int len,i;
     TELEMENTO aux;
