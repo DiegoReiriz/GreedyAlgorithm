@@ -12,9 +12,7 @@
 int solicitarMonedas();
 void imprimirVector(vectorP vec);
 int cambioInf(int x, vectorP valor, vectorP *solucion);
-/*
- * 
- */
+
 int main(int argc, char** argv) {
 
     char opt;
@@ -134,4 +132,13 @@ void imprimirVector(vectorP vec){
     for(i=0;i<len;i++){
         recuperar(vec,i,&aux);
     }
+}
+
+void cargarValorMonedas(char arch){
+    FILE *fp;
+    
+    fp=fopen(arch,"r");
+    
+    fclose(fp);
+    
 }
