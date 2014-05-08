@@ -21,19 +21,17 @@ int main(int argc, char** argv) {
     /*
      * Asignacion temporal de monedas
      */
-    vectorP monedas,solucion;
-    crear(&monedas,8);
-    crear(&solucion,8);
-    asignar(&monedas,0,200);
-    asignar(&monedas,1,100);
-    asignar(&monedas,2,50);
-    asignar(&monedas,3,20);
-    asignar(&monedas,4,10);
-    asignar(&monedas,5,5);
-    asignar(&monedas,6,2);
-    asignar(&monedas,7,1);
-
-    
+    vectorP monedas, solucion;
+    crear(&monedas, 8);
+    crear(&solucion, 8);
+    asignar(&monedas, 0, 200);
+    asignar(&monedas, 1, 100);
+    asignar(&monedas, 2, 50);
+    asignar(&monedas, 3, 20);
+    asignar(&monedas, 4, 10);
+    asignar(&monedas, 5, 5);
+    asignar(&monedas, 6, 2);
+    asignar(&monedas, 7, 1);
     do {
         printf("\nModo de Operacion");
         printf("\n===================");
@@ -46,20 +44,49 @@ int main(int argc, char** argv) {
 
         switch (opt) {
             case '1'://Monedas Infinitas
-                cambioInf(solicitarMonedas(),monedas,&solucion);
-                imprimirVector(solucion);
-                break;
+
             case '2'://Monedas Limitadas
-                solicitarMonedas();
+
+                do {
+                    printf("\nSeleccionar Tipo de Moneda");
+                    printf("\n==========================");
+                    printf("\n1)Euro");
+                    printf("\n2)Dolar");
+                    printf("\n3)Yen");
+                    printf("\n0)Salir");
+                    printf("\nOpcion: ");
+                    scanf(" %c", &opt); //corregir fallo no menu
+                    getchar();
+
+                    switch (opt) {
+                        case '1':
+
+                            break;
+                        case '2':
+
+                            break;
+                        case '3':
+                            cambioInf(solicitarMonedas(), monedas, &solucion);
+                            imprimirVector(solucion);
+                            break;
+                        default:
+
+                            break;
+                    }
+
+                } while (opt != '0');
+                
+                opt = ' ';
+                
                 break;
             case '0':
-                printf("\nFin del Prograna");
+                
                 break;
             default:
                 printf("\nOpcion Erronea");
                 break;
         }
-
+        
     } while (opt != '0');
 
     liberar(&monedas);
@@ -92,28 +119,28 @@ int solicitarMonedas() {
  * 
  */
 int cambioInf(int x, vectorP valor, vectorP *solucion) {
-    int len,val,i,suma=0;
+    int len, val, i, suma = 0;
     TELEMENTO temp;
-    
-    tamano(*solucion,&len);
-    
-    for (i = 0; i < len; i++) 
-        asignar(solucion,i,0);
-    
-    i=0;
-    while (suma < x && i < len){
-        recuperar(valor,i,&val);
+
+    tamano(*solucion, &len);
+
+    for (i = 0; i < len; i++)
+        asignar(solucion, i, 0);
+
+    i = 0;
+    while (suma < x && i < len) {
+        recuperar(valor, i, &val);
         if (suma + val <= x) {
-            recuperar(*solucion,i,&temp);
-            asignar(solucion,i,++temp);
+            recuperar(*solucion, i, &temp);
+            asignar(solucion, i, ++temp);
             suma += val;
         } else
             i++;
     }
     if (suma == x) return 1;
     else {
-        for (i = 0; i < len; i++) 
-            asignar(solucion,i,0);
+        for (i = 0; i < len; i++)
+            asignar(solucion, i, 0);
         return 0;
     }
 }
@@ -122,23 +149,14 @@ int cambioInf(int x, vectorP valor, vectorP *solucion) {
  * Funcion que se encargr de imprimir por pantalla o contenido do vector que se lle pasa como argumento
  * @param vectorP - vector a imprimir
  */
-void imprimirVector(vectorP vec){
-    int len,i;
+void imprimirVector(vectorP vec) {
+    int len, i;
     TELEMENTO aux;
-    
-    tamano(vec,&len);
-    
-    printf("\n");
-    for(i=0;i<len;i++){
-        recuperar(vec,i,&aux);
-    }
-}
 
-void cargarValorMonedas(char arch){
-    FILE *fp;
-    
-    fp=fopen(arch,"r");
-    
-    fclose(fp);
-    
+    tamano(vec, &len);
+
+    printf("\n");
+    for (i = 0; i < len; i++) {
+        recuperar(vec, i, &aux);
+    }
 }
