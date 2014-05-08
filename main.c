@@ -15,8 +15,6 @@ int cambioInf(int x, vectorP valor, vectorP *solucion);
 
 int main(int argc, char** argv) {
 
-    printf("Hello World!");
-    
     char opt;
     short mode; //variable que indica en que modo se esta traballando
 
