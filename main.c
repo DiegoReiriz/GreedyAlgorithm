@@ -22,8 +22,8 @@ int main(int argc, char** argv) {
     //escribirMonedas();
     //leerMonedas();
 
+    int cantidad;
     char opt, inf;
-
     char monedas[3][6] = {"euro", "dolar", "yen"};
     char monActual;
 
@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     /*
      * Asignacion temporal de monedas
      */
-    vectorP moneda = NULL, solucion = NULL;
+    vectorP moneda = NULL, solucion = NULL,stock=NULL;
 
     do {
         printf("\nModo de Operacion");
@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
             case '2'://Monedas Limitadas
 
                 if (!inf) {
-
+                    
                 }
 
                 do {
@@ -75,21 +75,30 @@ int main(int argc, char** argv) {
                     if (solucion != NULL)
                         liberar(&solucion);
 
+                    if (stock != NULL)
+                        liberar(&stock);
+                    
                     switch (opt) {
                         case '1'://euro
                             crear(&moneda, 8);
                             carasEuros(&moneda);
                             crear(&solucion, 8);
+                            if(!inf)
+                                crear(&stock, 8);
                             break;
                         case '2'://dolar
                             crear(&moneda, 4);
                             carasDolar(&moneda);
                             crear(&solucion, 4);
+                            if(!inf)
+                                crear(&stock, 4);
                             break;
                         case '3'://yen
                             crear(&moneda, 6);
                             carasYen(&moneda);
                             crear(&solucion, 6);
+                            if(!inf)
+                                crear(&stock, 6);
                             break;
 
                             //printf("\nMoneda Seleccionada: %s \n",monedas[monActual-strtol(opt,NULL,10)]);
@@ -98,11 +107,12 @@ int main(int argc, char** argv) {
 
                             break;
                     }
-
-                    cambioInf(solicitarMonedas(), moneda, &solucion);
-                    imprimirVector(moneda);
-                    imprimirVector(solucion);
-
+                    
+                    while(0 != (cantidad=solicitarMonedas())){
+                        cambioInf(cantidad, moneda, &solucion);
+                        imprimirVector(moneda);
+                        imprimirVector(solucion);
+                    }
                 } while (opt != '0');
 
                 opt = ' ';
