@@ -11,7 +11,7 @@
 
 int solicitarMonedas();
 void imprimirVector(vectorP vec);
-int cambioInf(int x, vectorP valor, vectorP *solucion);
+int cambio(int x, vectorP valor, vectorP *solucion, vectorP* stock);
 void escribirMonedas();
 void leerMonedas();
 void carasEuros(vectorP *eur);
@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     /*
      * Asignacion temporal de monedas
      */
-    vectorP moneda = NULL, solucion = NULL,stock=NULL;
+    vectorP moneda = NULL, solucion = NULL, stock = NULL;
 
     do {
         printf("\nModo de Operacion");
@@ -51,10 +51,6 @@ int main(int argc, char** argv) {
                 inf = 1;
 
             case '2'://Monedas Limitadas
-
-                if (!inf) {
-                    
-                }
 
                 do {
                     printf("\nSeleccionar Tipo de Moneda");
@@ -77,28 +73,31 @@ int main(int argc, char** argv) {
 
                     if (stock != NULL)
                         liberar(&stock);
-                    
+
                     switch (opt) {
                         case '1'://euro
                             crear(&moneda, 8);
                             carasEuros(&moneda);
                             crear(&solucion, 8);
-                            if(!inf)
+                            if (!inf)
                                 crear(&stock, 8);
+                            
                             break;
                         case '2'://dolar
                             crear(&moneda, 4);
                             carasDolar(&moneda);
                             crear(&solucion, 4);
-                            if(!inf)
+                            if (!inf)
                                 crear(&stock, 4);
+                            
                             break;
                         case '3'://yen
                             crear(&moneda, 6);
                             carasYen(&moneda);
                             crear(&solucion, 6);
-                            if(!inf)
+                            if (!inf)
                                 crear(&stock, 6);
+
                             break;
 
                             //printf("\nMoneda Seleccionada: %s \n",monedas[monActual-strtol(opt,NULL,10)]);
@@ -107,11 +106,15 @@ int main(int argc, char** argv) {
 
                             break;
                     }
-                    
-                    while(0 != (cantidad=solicitarMonedas())){
-                        cambioInf(cantidad, moneda, &solucion);
+
+                    while (0 != (cantidad = solicitarMonedas()) && opt != '0') {
+                        cambio(cantidad, moneda, &solucion, NULL);
                         imprimirVector(moneda);
                         imprimirVector(solucion);
+                        if (!inf){
+                            printf("\nStock Restante:");
+                            imprimirVector(stock);
+                        }
                     }
                 } while (opt != '0');
 
@@ -128,7 +131,9 @@ int main(int argc, char** argv) {
 
     } while (opt != '0');
 
-    liberar(&moneda);
+    if(moneda != NULL)
+        liberar(&moneda);
+    
     return (EXIT_SUCCESS);
 }
 
@@ -157,31 +162,64 @@ int solicitarMonedas() {
  * si se devolve un vector vacio.
  * 
  */
-int cambioInf(int x, vectorP valor, vectorP *solucion) {
-    int len, val, i, suma = 0;
-    TELEMENTO temp;
-
+int cambio(int x, vectorP valor, vectorP *solucion, vectorP* stock) {
+    int len, val, i, cant, suma = 0;
+    TELEMENTO temp,temp2,size;
+    vectorP stockTemp;
+    
+    tamano(stock,&size);
     tamano(*solucion, &len);
-
+    crear(&stockTemp,temp);
+    
     for (i = 0; i < len; i++)
         asignar(solucion, i, 0);
 
     i = 0;
     while (suma < x && i < len) {
-        recuperar(valor, i, &val);
-        if (suma + val <= x) {
-            recuperar(*solucion, i, &temp);
-            asignar(solucion, i, ++temp);
-            suma += val;
-        } else
-            i++;
+        if (size != -1) {
+            recuperar(stock, i, &cant);
+            recuperar(stockTemp,i,&temp);
+            if (cant-temp) {
+                recuperar(valor, i, &val);
+                if (suma + val <= x) {
+                    recuperar(*solucion, i, &temp);
+                    asignar(solucion, i, ++temp);
+                    recuperar(stockTemp, i, &temp);
+                    asignar(&stockTemp,i,++temp);
+                    suma += val;
+                } else
+                    i++;
+            }else
+                i++;
+        } else {
+            recuperar(valor, i, &val);
+            if (suma + val <= x) {
+                recuperar(*solucion, i, &temp);
+                asignar(solucion, i, ++temp);
+                suma += val;
+            } else
+                i++;
+        }
+
     }
-    if (suma == x) return 1;
-    else {
+    if (suma == x) {
+        if (size != -1) {
+            tamano(stock,&cant);
+
+            for(i=0;i<=cant;i++){
+                recuperar(stock, i, &temp);
+                recuperar(stockTemp, i, &temp2);
+                asignar(stock,i,temp-temp2);
+            }
+        }
+        return 1;
+    }else {
         for (i = 0; i < len; i++)
             asignar(solucion, i, 0);
         return 0;
     }
+    if(stock != NULL)
+        liberar(&stockTemp);
 }
 
 /** imprimirVector
