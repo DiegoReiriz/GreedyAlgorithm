@@ -12,8 +12,13 @@
 int solicitarMonedas();
 void imprimirVector(vectorP vec);
 int cambioInf(int x, vectorP valor, vectorP *solucion);
+void escribirMonedas();
+void leerMonedas();
+    
 
 int main(int argc, char** argv) {
+escribirMonedas();
+leerMonedas();
 
     char opt,inf;
     
@@ -180,11 +185,44 @@ void imprimirVector(vectorP vec) {
 
 void escribirMonedas(){
     FILE *fp;
-    fp=fopen("monedas.txt",'w');
+    fp=fopen("monedas.txt","w");
     
-    
-    
+    fprintf(fp,"euro 8");
+    fprintf(fp,"\n200 0");
+    fprintf(fp,"\n100 0");
+    fprintf(fp,"\n50 0");
+    fprintf(fp,"\n25 0");
+    fprintf(fp,"\n10 0");
+    fprintf(fp,"\n5 0");
+    fprintf(fp,"\n2 0");
+    fprintf(fp,"\n1 0");
+    fprintf(fp,"\n");
+    fprintf(fp,"\ndolar 4");
+    fprintf(fp,"\n25 0");
+    fprintf(fp,"\n10 0");
+    fprintf(fp,"\n5 0");
+    fprintf(fp,"\n1 0");
+    fprintf(fp,"\n");
+    fprintf(fp,"\nyen 6");
+    fprintf(fp,"\n500 0");
+    fprintf(fp,"\n100 0");
+    fprintf(fp,"\n50 0");
+    fprintf(fp,"\n10 0");
+    fprintf(fp,"\n5 0");
+    fprintf(fp,"\n1 0");
     fclose(fp);
     
 }
-void leerMonedas();
+void leerMonedas(){
+    FILE *fp;
+    int aux,aux3;
+    char aux2[10];
+    
+    fp=fopen("monedas.txt","r");
+    
+    do{
+        aux=fscanf(fp,"%s %d",&aux2,&aux3);
+    }while(aux!= EOF);
+    
+    fclose(fp);
+}
