@@ -15,23 +15,27 @@ int cambioInf(int x, vectorP valor, vectorP *solucion);
 
 int main(int argc, char** argv) {
 
-    char opt;
+    char opt,inf;
+    
+    char monedas[3][6]={"euro","dolar","yen"};
+    char monActual;
+    
     short mode; //variable que indica en que modo se esta traballando
 
     /*
      * Asignacion temporal de monedas
      */
-    vectorP monedas, solucion;
-    crear(&monedas, 8);
+    vectorP euros,stockEuros,dolares,sotckDolares,yen,stockYens, solucion;
+    crear(&euros, 8);
     crear(&solucion, 8);
-    asignar(&monedas, 0, 200);
-    asignar(&monedas, 1, 100);
-    asignar(&monedas, 2, 50);
-    asignar(&monedas, 3, 20);
-    asignar(&monedas, 4, 10);
-    asignar(&monedas, 5, 5);
-    asignar(&monedas, 6, 2);
-    asignar(&monedas, 7, 1);
+    asignar(&euros, 0, 200);
+    asignar(&euros, 1, 100);
+    asignar(&euros, 2, 50);
+    asignar(&euros, 3, 20);
+    asignar(&euros, 4, 10);
+    asignar(&euros, 5, 5);
+    asignar(&euros, 6, 2);
+    asignar(&euros, 7, 1);
     do {
         printf("\nModo de Operacion");
         printf("\n===================");
@@ -42,11 +46,17 @@ int main(int argc, char** argv) {
         scanf(" %c", &opt); //corregir fallo no menu
         getchar();
 
+        inf=0;//por defecto non se activa o modo infinito salvo que se seleccione no menu
         switch (opt) {
             case '1'://Monedas Infinitas
-
+                inf=1;
+                
             case '2'://Monedas Limitadas
-
+                
+                if(!inf){
+                    
+                }
+                
                 do {
                     printf("\nSeleccionar Tipo de Moneda");
                     printf("\n==========================");
@@ -58,15 +68,21 @@ int main(int argc, char** argv) {
                     scanf(" %c", &opt); //corregir fallo no menu
                     getchar();
 
+                    monActual=( sizeof(monedas) / sizeof(char) ) / (sizeof(monedas[0]) / sizeof(char) );//variable que gestiona que elemento do array que maneja os tipos de mona estamos usando
+                    
                     switch (opt) {
                         case '1':
-
-                            break;
+                            monActual--;
+                            
                         case '2':
-
-                            break;
+                            monActual--;
+                            
                         case '3':
-                            cambioInf(solicitarMonedas(), monedas, &solucion);
+                            monActual--;
+                            
+                            printf("\nMoneda Seleccionada: %s \n",monedas[monActual]);
+                            
+                            cambioInf(solicitarMonedas(), euros, &solucion);
                             imprimirVector(solucion);
                             break;
                         default:
@@ -89,7 +105,7 @@ int main(int argc, char** argv) {
         
     } while (opt != '0');
 
-    liberar(&monedas);
+    liberar(&euros);
     return (EXIT_SUCCESS);
 }
 
@@ -158,5 +174,17 @@ void imprimirVector(vectorP vec) {
     printf("\n");
     for (i = 0; i < len; i++) {
         recuperar(vec, i, &aux);
+        printf("%d \t",aux);
     }
 }
+
+void escribirMonedas(){
+    FILE *fp;
+    fp=fopen("monedas.txt",'w');
+    
+    
+    
+    fclose(fp);
+    
+}
+void leerMonedas();
