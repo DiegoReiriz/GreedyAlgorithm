@@ -13,10 +13,7 @@ int solicitarMonedas();
 void imprimirVector(vectorP vec);
 int cambio(int x, vectorP valor, vectorP *solucion, vectorP* stock);
 void escribirMonedas();
-void leerMonedas();
-void carasEuros(vectorP *eur);
-void carasDolar(vectorP *dol);
-void carasYen(vectorP *y);
+void leerCarasMoneda(char nombre[10],vectorP *caras);
 
 int main(int argc, char** argv) {
     //escribirMonedas();
@@ -24,11 +21,8 @@ int main(int argc, char** argv) {
 
     int cantidad;
     char opt, inf;
-    char monedas[3][6] = {"euro", "dolar", "yen"};
+    //char monedas[3][6] = {"euro", "dolar", "yen"};
     char monActual;
-
-    short mode; //variable que indica en que modo se esta traballando
-
 
     /*
      * Asignacion temporal de monedas
@@ -63,7 +57,7 @@ int main(int argc, char** argv) {
                     scanf(" %c", &opt); //corregir fallo no menu
                     getchar();
 
-                    monActual = (sizeof (monedas) / sizeof (char)) / (sizeof (monedas[0]) / sizeof (char)); //variable que gestiona que elemento do array que maneja os tipos de mona estamos usando
+                    //monActual = (sizeof (monedas) / sizeof (char)) / (sizeof (monedas[0]) / sizeof (char)); //variable que gestiona que elemento do array que maneja os tipos de mona estamos usando
 
                     if (moneda != NULL)
                         liberar(&moneda);
@@ -77,7 +71,7 @@ int main(int argc, char** argv) {
                     switch (opt) {
                         case '1'://euro
                             crear(&moneda, 8);
-                            carasEuros(&moneda);
+                            leerCarasMoneda("euro",&moneda);
                             crear(&solucion, 8);
                             if (!inf)
                                 crear(&stock, 8);
@@ -85,7 +79,7 @@ int main(int argc, char** argv) {
                             break;
                         case '2'://dolar
                             crear(&moneda, 4);
-                            carasDolar(&moneda);
+                            leerCarasMoneda("dolar",&moneda);
                             crear(&solucion, 4);
                             if (!inf)
                                 crear(&stock, 4);
@@ -93,7 +87,7 @@ int main(int argc, char** argv) {
                             break;
                         case '3'://yen
                             crear(&moneda, 6);
-                            carasYen(&moneda);
+                            leerCarasMoneda("yen",&moneda);
                             crear(&solucion, 6);
                             if (!inf)
                                 crear(&stock, 6);
@@ -239,33 +233,6 @@ void imprimirVector(vectorP vec) {
     }
 }
 
-void carasEuros(vectorP *eur) {
-    asignar(eur, 0, 200);
-    asignar(eur, 1, 100);
-    asignar(eur, 2, 50);
-    asignar(eur, 3, 20);
-    asignar(eur, 4, 10);
-    asignar(eur, 5, 5);
-    asignar(eur, 6, 2);
-    asignar(eur, 7, 1);
-}
-
-void carasDolar(vectorP *dol) {
-    asignar(dol, 0, 25);
-    asignar(dol, 1, 10);
-    asignar(dol, 2, 5);
-    asignar(dol, 3, 1);
-}
-
-void carasYen(vectorP *y) {
-    asignar(y, 0, 500);
-    asignar(y, 1, 100);
-    asignar(y, 2, 50);
-    asignar(y, 3, 10);
-    asignar(y, 4, 5);
-    asignar(y, 5, 1);
-}
-
 void escribirMonedas() {
     FILE *fp;
     fp = fopen("monedas.txt", "w");
@@ -297,24 +264,29 @@ void escribirMonedas() {
 
 }
 
-void leerMonedas() {
+void leerCarasMoneda(char nombre[10],vectorP *caras){
     FILE *fp;
-    vectorP vec, stock;
-    int aux, caras, i;
-    char nombre[10];
+    vectorP vec[10], stock;
+    TELEMENTO elem;
+    int aux,i;
+    char opt[5],nom[10],moneda[10];
 
     fp = fopen("monedas.txt", "r");
 
     do {
-        aux = fscanf(fp, "%s %d", &nombre, &caras);
-
-
-
-        for (i = 0; i < caras; i++) {
-
+        
+        aux = fscanf(fp, "%s %s", &opt,&nom);
+        
+        if(opt=="m:" && nom==nombre){
+            aux = fscanf(fp, "%s %d", &opt,&elem);
+            while(aux != EOF && opt == "c:"){
+                i++;
+                asignar(caras,i,elem);
+                aux = fscanf(fp, "%s %d", &opt,&elem);
+            }
         }
-
-    } while (aux != EOF);
+            
+    }while(aux != EOF);
 
     fclose(fp);
 }

@@ -14,7 +14,9 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>main.c</itemPath>
+      <itemPath>moneda.c</itemPath>
       <itemPath>monedas.txt</itemPath>
+      <itemPath>stock.txt</itemPath>
       <itemPath>vectordinamico.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -41,7 +43,11 @@
       </compileType>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="moneda.c" ex="false" tool="0" flavor2="0">
+      </item>
       <item path="monedas.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="stock.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="vectordinamico.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -70,7 +76,11 @@
       </compileType>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="moneda.c" ex="false" tool="0" flavor2="0">
+      </item>
       <item path="monedas.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="stock.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="vectordinamico.c" ex="false" tool="0" flavor2="0">
       </item>
