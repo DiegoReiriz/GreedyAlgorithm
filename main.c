@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
                     
                     while ( opt != 0 && 0 != (numMonedas = solicitarMonedas())){
                         
-                        cambio(numMonedas,moneda[pos].caras , &solucion, NULL);
+                        cambio(numMonedas,moneda[opt-1].caras , &solucion, NULL);
                         imprimirVector(moneda[opt-1].caras);
                         imprimirVector(solucion);
                         if (!inf){
