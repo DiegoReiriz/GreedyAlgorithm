@@ -58,20 +58,19 @@ int main(int argc, char** argv) {
                 do {
                     printf("\nSeleccionar Tipo de Moneda");
                     printf("\n==========================");
-                    p=primero(lista);
-
+                    p=primero(lista);;
                     recupera(lista,p,&moneda);
                     if(moneda != NULL){
                         pos=1;
-                        printf("\n%d) %s",pos,getName(*&moneda));
+                        printf("\n%d)%s",pos,getName(*&moneda));
                         
-/*
+
                         do{
                             pos++;
                             recupera(lista,p,&moneda);
                             printf("\n%d)%s",pos,getName(moneda));
                         }while((p=siguiente(lista,p)) != NULL);
-*/
+
                     }
                     printf("\n0)Salir");
                     printf("\nOpcion: ");
@@ -80,7 +79,7 @@ int main(int argc, char** argv) {
 
                     while (0 != (cantidad = solicitarMonedas()) && opt != '0') {
                         cambio(cantidad, moneda, &solucion, NULL);
-                        imprimirVector(moneda);
+                        imprimirVector(getCaras(moneda));
                         imprimirVector(solucion);
                         if (!inf){
                             printf("\nStock Restante:");
@@ -216,7 +215,7 @@ void cargarMonedas(TLISTA *lista){
     int end,size,i,aux;
     char *linea,*nombre,*valor;
     char buffer[LONG_MAX_LINE];
-    char *separador=" ";
+    char *separador=",";
     
     
     
@@ -246,7 +245,7 @@ void cargarMonedas(TLISTA *lista){
                 asignar(&caras,i,aux);
                 EliminarCola(&temp);
             }
-                     
+            imprimirVector(caras);
             setCaras(&moneda,caras);
             
             p=fin(*lista);

@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "vectordinamico.h"
 
 typedef struct {
-    char *nombre;
+    char nombre[10];
     vectorP caras;
     vectorP stock;
 } structMoneda;
@@ -15,11 +16,11 @@ void crearMoneda(Moneda *moneda){
 }
 
 char *getName(Moneda moneda) {
-    return (moneda)->nombre;
+    return (*moneda).nombre;
 }
 
 void setName(Moneda *moneda, char* nombre) {
-    (*moneda)->nombre = nombre;
+    strcpy((*moneda)->nombre,nombre);
 }
 
 vectorP *getStock(Moneda moneda) {
