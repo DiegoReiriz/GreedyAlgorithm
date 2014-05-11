@@ -9,34 +9,33 @@
 #include <stdlib.h>
 #include <string.h>
 #include "vectordinamico.h"
-#include "listaMonedas.h"
 #include "colas.h"
-#include "moneda.h"
-
 
 #define LONG_MAX_LINE 500
+
+typedef struct {
+    char nombre[10];
+    vectorP *caras;
+    vectorP *stock;
+} Moneda;
+
 
 int solicitarMonedas();
 void imprimirVector(vectorP vec);
 int cambio(int x, vectorP valor, vectorP *solucion, vectorP* stock);
 void escribirMonedas();
-void cargarMonedas(TLISTA *lista);
+int cargarMonedas(Moneda moneda[10]);
 
 int main(int argc, char** argv) {
     
-    int cantidad,pos;
+    int cantidad,pos,numMonedas;
     char opt, inf;
-
-    POSICION p;
     
-    TLISTA lista;
-    crea(&lista);
+    Moneda moneda[10];
     
-    Moneda moneda;
+    cantidad=cargarMonedas(moneda);
     
-    cargarMonedas(&lista);
-    
-    vectorP solucion = NULL, stock = NULL;
+    vectorP solucion = NULL,stock=NULL;
 
     do {
         printf("\nModo de Operacion");
@@ -45,53 +44,47 @@ int main(int argc, char** argv) {
         printf("\n2)Monedas Limitadas");
         printf("\n0)Salir");
         printf("\nOpcion: ");
-        scanf(" %c", &opt); //corregir fallo no menu
-        getchar();
+        scanf(" %d", &opt); //corregir fallo no menu
 
         inf = 0; //por defecto non se activa o modo infinito salvo que se seleccione no menu
         switch (opt) {
-            case '1'://Monedas Infinitas
+            case 1://Monedas Infinitas
                 inf = 1;
 
-            case '2'://Monedas Limitadas
+            case 2://Monedas Limitadas
 
                 do {
                     printf("\nSeleccionar Tipo de Moneda");
                     printf("\n==========================");
-                    p=primero(lista);;
-                    recupera(lista,p,&moneda);
-                    if(moneda != NULL){
-                        pos=1;
-                        printf("\n%d)%s",pos,getName(*&moneda));
-                        
-
-                        do{
-                            pos++;
-                            recupera(lista,p,&moneda);
-                            printf("\n%d)%s",pos,getName(moneda));
-                        }while((p=siguiente(lista,p)) != NULL);
-
+                    
+                    for(pos=0;pos<cantidad;pos++){
+                        printf("\n%d)%s",pos+1,moneda[pos].nombre);
                     }
+                    
                     printf("\n0)Salir");
-                    printf("\nOpcion: ");
-                    scanf(" %c", &opt); //corregir fallo no menu
-                    getchar();
+                    
+                    do{
+                        printf("\nOpcion: ");
+                        scanf(" %d", &opt); //corregir fallo no menu
 
-                    while (0 != (cantidad = solicitarMonedas()) && opt != '0') {
-                        cambio(cantidad, moneda, &solucion, NULL);
-                        imprimirVector(getCaras(moneda));
+                    }while(opt<0 || opt>(cantidad+1));
+                    
+                    while ( opt != 0 && 0 != (numMonedas = solicitarMonedas())){
+                        
+                        cambio(numMonedas,moneda[pos].caras , &solucion, NULL);
+                        imprimirVector(moneda[opt-1].caras);
                         imprimirVector(solucion);
                         if (!inf){
                             printf("\nStock Restante:");
                             imprimirVector(stock);
                         }
                     }
-                } while (opt != '0');
+                } while (opt != 0);
 
-                opt = ' ';
+                opt = -1;
 
                 break;
-            case '0':
+            case 0:
 
                 break;
             default:
@@ -99,10 +92,10 @@ int main(int argc, char** argv) {
                 break;
         }
 
-    } while (opt != '0');
+    } while (opt != 0);
 
-    if(moneda != NULL)
-        liberar(&moneda);
+    
+        
     
     return (EXIT_SUCCESS);
 }
@@ -133,35 +126,17 @@ int solicitarMonedas() {
  * 
  */
 int cambio(int x, vectorP valor, vectorP *solucion, vectorP* stock) {
-    int len, val, i, cant, suma = 0;
-    TELEMENTO temp,temp2,size;
-    vectorP stockTemp;
+    int len, val, i, suma = 0;
+    TELEMENTO temp;
     
-    tamano(stock,&size);
-    tamano(*solucion, &len);
-    crear(&stockTemp,temp);
+    tamano(valor,&len);
+    crear(solucion,len);
     
     for (i = 0; i < len; i++)
-        asignar(solucion, i, 0);
-
+            asignar(solucion, i, 0);
+    
     i = 0;
     while (suma < x && i < len) {
-        if (size != -1) {
-            recuperar(stock, i, &cant);
-            recuperar(stockTemp,i,&temp);
-            if (cant-temp) {
-                recuperar(valor, i, &val);
-                if (suma + val <= x) {
-                    recuperar(*solucion, i, &temp);
-                    asignar(solucion, i, ++temp);
-                    recuperar(stockTemp, i, &temp);
-                    asignar(&stockTemp,i,++temp);
-                    suma += val;
-                } else
-                    i++;
-            }else
-                i++;
-        } else {
             recuperar(valor, i, &val);
             if (suma + val <= x) {
                 recuperar(*solucion, i, &temp);
@@ -169,27 +144,15 @@ int cambio(int x, vectorP valor, vectorP *solucion, vectorP* stock) {
                 suma += val;
             } else
                 i++;
-        }
-
     }
     if (suma == x) {
-        if (size != -1) {
-            tamano(stock,&cant);
-
-            for(i=0;i<=cant;i++){
-                recuperar(stock, i, &temp);
-                recuperar(stockTemp, i, &temp2);
-                asignar(stock,i,temp-temp2);
-            }
-        }
         return 1;
     }else {
         for (i = 0; i < len; i++)
             asignar(solucion, i, 0);
         return 0;
     }
-    if(stock != NULL)
-        liberar(&stockTemp);
+    
 }
 
 /** imprimirVector
@@ -209,28 +172,27 @@ void imprimirVector(vectorP vec) {
     }
 }
 
-void cargarMonedas(TLISTA *lista){
+int cargarMonedas(Moneda moneda[10]){
     FILE *fp;
-    POSICION p;
-    int end,size,i,aux;
+    int end,size,i,aux,cantidad;
     char *linea,*nombre,*valor;
     char buffer[LONG_MAX_LINE];
     char *separador=",";
     
-    
+    cantidad=0;
     
     if((fp=fopen("monedas.txt","r")) != NULL){
         do{   
+            
             TCOLA temp;
             ColaVacia(&temp);
-            Moneda moneda;        
-            crearMoneda(&moneda);
             
             linea=fgets(buffer,LONG_MAX_LINE,fp);
              
             nombre = strtok( linea, separador );    // Primera llamada => Primer token
                 
-            setName(&moneda,nombre);
+            strcpy(moneda[cantidad].nombre,nombre);
+            
             end=0;
             while( (valor = strtok( NULL, separador )) != NULL ){    // Posteriores llamadas
                 AnadirCola(&temp, strtol(valor,NULL,10));             
@@ -238,20 +200,18 @@ void cargarMonedas(TLISTA *lista){
             }
             
             vectorP caras;
-            crear(&caras,size);
+            crear(&caras,end);
             
             for(i=0;i<end;i++){
                 PrimeroCola(temp,&aux);
                 asignar(&caras,i,aux);
                 EliminarCola(&temp);
             }
-            imprimirVector(caras);
-            setCaras(&moneda,caras);
-            
-            p=fin(*lista);
-            inserta(lista,p,moneda);
+            moneda[cantidad].caras=caras;
+            cantidad++;
         }while(!feof(fp));
     }else{
         
     }
+    return cantidad;
 }
