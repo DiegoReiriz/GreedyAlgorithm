@@ -54,11 +54,11 @@ int main(int argc, char** argv) {
 
             case 2://Monedas Limitadas
 
-                if(!inf){
+                if (!inf) {
                     cargarStock(moneda);
                     imprimirVector(moneda[1].stock);
                 }
-                
+
                 do {
                     printf("\nSeleccionar Tipo de Moneda");
                     printf("\n==========================");
@@ -76,13 +76,16 @@ int main(int argc, char** argv) {
                     } while (opt < 0 || opt > (cantidad + 1));
 
                     while (opt != 0 && 0 != (numMonedas = solicitarMonedas())) {
-                        
-                        cambio(numMonedas, moneda[opt - 1].caras, &solucion, (moneda[opt - 1].stock));
-                        imprimirVector(moneda[opt - 1].caras);
-                        imprimirVector(solucion);
-                        if (!inf) {
-                            printf("\nStock Restante:");
-                            imprimirVector(moneda[opt - 1].stock);
+
+                        if (cambio(numMonedas, moneda[opt - 1].caras, &solucion, (moneda[opt - 1].stock))) {
+                            imprimirVector(moneda[opt - 1].caras);
+                            imprimirVector(solucion);
+                            if (!inf) {
+                                printf("\nStock Restante:");
+                                imprimirVector(moneda[opt - 1].stock);
+                            }
+                        } else {
+                            printf("\nNon se pudo dar o cambio");
                         }
                     }
                 } while (opt != 0);
@@ -132,23 +135,23 @@ int solicitarMonedas() {
  * 
  */
 int cambio(int x, vectorP valor, vectorP *solucion, vectorP *stock) {
-    int len, val, i,cant, suma = 0;
-    TELEMENTO temp,temp2;
+    int len, val, i, cant, suma = 0;
+    TELEMENTO temp, temp2;
 
     tamano(valor, &len);
     crear(solucion, len);
 
     vectorP stock2;
-    crear(&stock2,len);
-    
-    for (i = 0; i < len; i++){
+    crear(&stock2, len);
+
+    for (i = 0; i < len; i++) {
         asignar(solucion, i, 0);
         asignar(&stock2, i, 0);
     }
 
     i = 0;
     while (suma < x && i < len) {
-        if(stock == NULL){
+        if (stock == NULL) {
             recuperar(valor, i, &val);
             if (suma + val <= x) {
                 recuperar(*solucion, i, &temp);
@@ -156,9 +159,10 @@ int cambio(int x, vectorP valor, vectorP *solucion, vectorP *stock) {
                 suma += val;
             } else
                 i++;
-        }else{
+        } else {
             recuperar(stock, i, &cant);
-            if(cant>0){
+            recuperar(stock2, i, &temp);
+            if (cant - temp > 0) {
                 recuperar(valor, i, &val);
                 if (suma + val <= x) {
                     recuperar(*solucion, i, &temp);
@@ -169,19 +173,19 @@ int cambio(int x, vectorP valor, vectorP *solucion, vectorP *stock) {
                     cant--;
                 } else
                     i++;
-            }else 
+            } else
                 i++;
         }
     }
     if (suma == x) {
-        for (i = 0; i < len && stock != NULL; i++){
-             recuperar(stock2, i, &temp);
-             recuperar(stock, i, &temp2);
-             asignar((vectorP *)&stock, i, temp2-temp);
+        for (i = 0; i < len && stock != NULL; i++) {
+            recuperar(stock2, i, &temp);
+            recuperar(stock, i, &temp2);
+            asignar((vectorP *) & stock, i, temp2 - temp);
         }
-        
+
         liberar(&stock2);
-        
+
         return 1;
     } else {
         for (i = 0; i < len; i++)
@@ -252,7 +256,7 @@ int cargarMonedas(Moneda moneda[10]) {
 
     }
     fclose(fp);
-    
+
     return cantidad;
 }
 
@@ -275,25 +279,25 @@ int cargarStock(Moneda moneda[10]) {
 
             nombre = strtok(linea, separador); // Primera llamada => Primer token
 
-            
 
-                end = 0;
-                while ((valor = strtok(NULL, separador)) != NULL) { // Posteriores llamadas
-                    AnadirCola(&temp, strtol(valor, NULL, 10));
-                    end++;
-                }
 
-                vectorP stock;
-                crear(&stock, end);
+            end = 0;
+            while ((valor = strtok(NULL, separador)) != NULL) { // Posteriores llamadas
+                AnadirCola(&temp, strtol(valor, NULL, 10));
+                end++;
+            }
 
-                for (i = 0; i < end; i++) {
-                    PrimeroCola(temp, &aux);
-                    asignar(&stock, i, aux);
-                    EliminarCola(&temp);
-                }
-                moneda[cantidad].stock = stock;
-                cantidad++;
-            
+            vectorP stock;
+            crear(&stock, end);
+
+            for (i = 0; i < end; i++) {
+                PrimeroCola(temp, &aux);
+                asignar(&stock, i, aux);
+                EliminarCola(&temp);
+            }
+            moneda[cantidad].stock = stock;
+            cantidad++;
+
         } while (!feof(fp));
     } else {
 
