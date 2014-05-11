@@ -4,6 +4,9 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>colas.h</itemPath>
+      <itemPath>listaMonedas.h</itemPath>
+      <itemPath>moneda.h</itemPath>
       <itemPath>vectordinamico.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -13,6 +16,8 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>colas.c</itemPath>
+      <itemPath>listaMonedas.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>moneda.c</itemPath>
       <itemPath>monedas.txt</itemPath>
@@ -41,9 +46,19 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="colas.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="colas.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="listaMonedas.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="listaMonedas.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="moneda.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="moneda.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="monedas.txt" ex="false" tool="3" flavor2="0">
       </item>
@@ -74,9 +89,19 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="colas.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="colas.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="listaMonedas.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="listaMonedas.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="moneda.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="moneda.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="monedas.txt" ex="false" tool="3" flavor2="0">
       </item>

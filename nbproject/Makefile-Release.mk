@@ -35,6 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/colas.o \
+	${OBJECTDIR}/listaMonedas.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/moneda.o \
 	${OBJECTDIR}/vectordinamico.o
@@ -63,6 +65,16 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/greedyalgorithm.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/greedyalgorithm ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/colas.o: colas.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/colas.o colas.c
+
+${OBJECTDIR}/listaMonedas.o: listaMonedas.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/listaMonedas.o listaMonedas.c
 
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}

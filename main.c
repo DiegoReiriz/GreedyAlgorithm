@@ -7,26 +7,31 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "vectordinamico.h"
+#include "listaMonedas.h"
+#include "colas.h"
+#include "moneda.h"
+
+
+#define LONG_MAX_LINE 500
 
 int solicitarMonedas();
 void imprimirVector(vectorP vec);
 int cambio(int x, vectorP valor, vectorP *solucion, vectorP* stock);
 void escribirMonedas();
-void leerCarasMoneda(char nombre[10],vectorP *caras);
+void cargarMonedas(TLISTA *lista);
 
 int main(int argc, char** argv) {
-    //escribirMonedas();
-    //leerMonedas();
-
+    
     int cantidad;
     char opt, inf;
-    //char monedas[3][6] = {"euro", "dolar", "yen"};
-    char monActual;
 
-    /*
-     * Asignacion temporal de monedas
-     */
+    TLISTA lista;
+    crea(&lista);
+    
+    cargarMonedas(lista);
+    
     vectorP moneda = NULL, solucion = NULL, stock = NULL;
 
     do {
@@ -71,7 +76,7 @@ int main(int argc, char** argv) {
                     switch (opt) {
                         case '1'://euro
                             crear(&moneda, 8);
-                            leerCarasMoneda("euro",&moneda);
+                            //leerCarasMoneda("euro",&moneda);
                             crear(&solucion, 8);
                             if (!inf)
                                 crear(&stock, 8);
@@ -79,7 +84,7 @@ int main(int argc, char** argv) {
                             break;
                         case '2'://dolar
                             crear(&moneda, 4);
-                            leerCarasMoneda("dolar",&moneda);
+                            //leerCarasMoneda("dolar",&moneda);
                             crear(&solucion, 4);
                             if (!inf)
                                 crear(&stock, 4);
@@ -87,7 +92,7 @@ int main(int argc, char** argv) {
                             break;
                         case '3'://yen
                             crear(&moneda, 6);
-                            leerCarasMoneda("yen",&moneda);
+                            //leerCarasMoneda("yen",&moneda);
                             crear(&solucion, 6);
                             if (!inf)
                                 crear(&stock, 6);
@@ -233,60 +238,46 @@ void imprimirVector(vectorP vec) {
     }
 }
 
-void escribirMonedas() {
+void cargarMonedas(TLISTA *lista){
     FILE *fp;
-    fp = fopen("monedas.txt", "w");
-
-    fprintf(fp, "euro 8");
-    fprintf(fp, "\n200 0");
-    fprintf(fp, "\n100 0");
-    fprintf(fp, "\n50 0");
-    fprintf(fp, "\n25 0");
-    fprintf(fp, "\n10 0");
-    fprintf(fp, "\n5 0");
-    fprintf(fp, "\n2 0");
-    fprintf(fp, "\n1 0");
-    fprintf(fp, "\n");
-    fprintf(fp, "\ndolar 4");
-    fprintf(fp, "\n25 0");
-    fprintf(fp, "\n10 0");
-    fprintf(fp, "\n5 0");
-    fprintf(fp, "\n1 0");
-    fprintf(fp, "\n");
-    fprintf(fp, "\nyen 6");
-    fprintf(fp, "\n500 0");
-    fprintf(fp, "\n100 0");
-    fprintf(fp, "\n50 0");
-    fprintf(fp, "\n10 0");
-    fprintf(fp, "\n5 0");
-    fprintf(fp, "\n1 0");
-    fclose(fp);
-
-}
-
-void leerCarasMoneda(char nombre[10],vectorP *caras){
-    FILE *fp;
-    vectorP vec[10], stock;
-    TELEMENTO elem;
-    int aux,i;
-    char opt[5],nom[10],moneda[10];
-
-    fp = fopen("monedas.txt", "r");
-
-    do {
-        
-        aux = fscanf(fp, "%s %s", &opt,&nom);
-        
-        if(opt=="m:" && nom==nombre){
-            aux = fscanf(fp, "%s %d", &opt,&elem);
-            while(aux != EOF && opt == "c:"){
-                i++;
-                asignar(caras,i,elem);
-                aux = fscanf(fp, "%s %d", &opt,&elem);
+    int end,size,i,aux;
+    char *linea,*nombre,*valor;
+    char buffer[LONG_MAX_LINE];
+    char *separador=" ";
+    
+    
+    
+    if((fp=fopen("monedas.txt","r")) != NULL){
+        do{   
+            TCOLA temp;
+            ColaVacia(&temp);
+            Moneda moneda;        
+    
+            linea=fgets(buffer,LONG_MAX_LINE,fp);
+             
+            nombre = strtok( linea, separador );    // Primera llamada => Primer token
+                
+            setName(&moneda,nombre);
+            end=0;
+            while( (valor = strtok( NULL, separador )) != NULL ){    // Posteriores llamadas
+                AnadirCola(&temp, strtol(valor,NULL,10));             
+                end++;
             }
-        }
             
-    }while(aux != EOF);
-
-    fclose(fp);
+            vectorP caras;
+            crear(&caras,size);
+            
+            for(i=0;i<end;i++){
+                PrimeroCola(temp,&aux);
+                asignar(&caras,i,aux);
+                EliminarCola(&temp);
+            }
+            
+            setCaras(&moneda,caras);
+            
+            inserta(lista,fin(lista),moneda);
+        }while(end != EOF);
+    }else{
+        
+    }
 }

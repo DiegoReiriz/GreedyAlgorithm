@@ -7,22 +7,22 @@ typedef int TELEMENTO;
 
 typedef struct {
     TELEMENTO *datos; /*valores del vector*/
-    int tam; /*tamano del vector*/
+    unsigned long int tam; /*tamano del vector*/
 } STVECTOR; /*definición de la estructura*/
 
 typedef STVECTOR *vectorP; /*puntero a estructura*/
 
 /* Prototipos de las funciones */
-void crear(vectorP *v1, int tam1);
-void asignar(vectorP *v1, int posicion, TELEMENTO valor);
-void tamano(vectorP v1, int *t);
-void recuperar(vectorP v1, int pos, TELEMENTO *d);
+void crear(vectorP *v1, unsigned long tam1);
+void asignar(vectorP *v1, unsigned long posicion, TELEMENTO valor);
+void tamano(vectorP v1, unsigned long *t);
+void recuperar(vectorP v1, unsigned long pos, TELEMENTO *d);
 void liberar(vectorP *v1);
-void swap (vectorP *pvector,int m, int n);
+void swap (vectorP *pvector,unsigned long m, unsigned long n);
 
 /*Función crear: asigna memoria y devuelve la asignación al vector*/
-void crear(vectorP *v1, int tam1) {
-    int i = 0;
+void crear(vectorP *v1, unsigned long tam1) {
+    unsigned long int i = 0;
             
     *v1 = (vectorP) malloc(sizeof (STVECTOR));
     (*v1)->datos = (TELEMENTO*) malloc(tam1 * sizeof (TELEMENTO));
@@ -32,13 +32,13 @@ void crear(vectorP *v1, int tam1) {
 }
 
 /*Función asignar: Asigna un valor a una posición del vector */
-void asignar(vectorP *v1, int posicion, TELEMENTO valor) {
+void asignar(vectorP *v1, unsigned long posicion, TELEMENTO valor) {
     if(v1 != NULL && (*v1)->datos != NULL) //comprobase si existe o TAD e o vector
         *((*v1)->datos + posicion) = valor;
 }
 
 /*Función tamano: Devuelve el tamaño del vector*/
-void tamano(vectorP v1, int *t) {
+void tamano(vectorP v1, unsigned long *t) {
     if(v1 != NULL) //comprobase si existe o vector
         *t = v1->tam;
     else
@@ -48,7 +48,7 @@ void tamano(vectorP v1, int *t) {
 }
 
 /*Función recuperar: devuelve el valor de la posicion indicada del vector*/
-void recuperar(vectorP v1, int pos, TELEMENTO *d) {
+void recuperar(vectorP v1, unsigned long pos, TELEMENTO *d) {
     /* Comprobase o vector existe e si se accede a unha posicion de memoria
        dentro das reservadas para o vector */
     if(v1 != NULL && pos >= 0 && pos < v1->tam)    
@@ -64,7 +64,7 @@ void liberar(vectorP *v1) {
 }
 
 /*Funcion swap: intercambia el valor de dos posiciones del vector*/
-void swap (vectorP *pvector,int m, int n){
+void swap (vectorP *pvector,unsigned long m, unsigned long n){
     TELEMENTO aux,aux2;
     
     recuperar(*pvector,m,&aux);
