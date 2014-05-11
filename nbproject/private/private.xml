@@ -7,10 +7,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/entakitos/Documents/NetBeansProjects/GreedyAlgorithm/listaMonedas.h</file>
             <file>file:/C:/Users/entakitos/Documents/NetBeansProjects/GreedyAlgorithm/main.c</file>
-            <file>file:/C:/Users/entakitos/Documents/NetBeansProjects/GreedyAlgorithm/cola.c</file>
-            <file>file:/C:/Users/entakitos/Documents/NetBeansProjects/GreedyAlgorithm/cola.h</file>
+            <file>file:/C:/Users/entakitos/Documents/NetBeansProjects/GreedyAlgorithm/colas.c</file>
+            <file>file:/C:/Users/entakitos/Documents/NetBeansProjects/GreedyAlgorithm/colas.h</file>
+            <file>file:/C:/Users/entakitos/Documents/NetBeansProjects/GreedyAlgorithm/vectordinamico.c</file>
             <file>file:/C:/Users/entakitos/Documents/NetBeansProjects/GreedyAlgorithm/moneda.c</file>
+            <file>file:/C:/Users/entakitos/Documents/NetBeansProjects/GreedyAlgorithm/moneda.h</file>
+            <file>file:/C:/Users/entakitos/Documents/NetBeansProjects/GreedyAlgorithm/vectordinamico.h</file>
+            <file>file:/C:/Users/entakitos/Documents/NetBeansProjects/GreedyAlgorithm/listaMonedas.c</file>
         </group>
     </open-files>
 </project-private>

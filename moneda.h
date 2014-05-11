@@ -2,6 +2,8 @@
 
 typedef void *Moneda;
 
+void crearMoneda(Moneda *moneda);
+
 char *getName(Moneda moneda);
 
 void setName(Moneda *moneda,char* nombre);
@@ -13,3 +15,5 @@ void setStock(Moneda *moneda,vectorP stock);
 vectorP *getCaras(Moneda moneda);
 
 void setCaras(Moneda *moneda,vectorP caras);
+
+void liberarMoneda(Moneda *moneda);

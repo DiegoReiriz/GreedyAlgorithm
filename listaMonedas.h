@@ -9,7 +9,6 @@ void destruye(TLISTA *l);
 POSICION primero(TLISTA l);
 POSICION fin(TLISTA l);
 POSICION siguiente(TLISTA l, POSICION p);
-POSICION anterior(TLISTA l, POSICION p);
 POSICION buscar(TLISTA l, TIPOELEM E);
 int esVacia(TLISTA l);
 void recupera(TLISTA l, POSICION p, TIPOELEM *e);

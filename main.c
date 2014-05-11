@@ -24,15 +24,19 @@ void cargarMonedas(TLISTA *lista);
 
 int main(int argc, char** argv) {
     
-    int cantidad;
+    int cantidad,pos;
     char opt, inf;
 
+    POSICION p;
+    
     TLISTA lista;
     crea(&lista);
     
-    cargarMonedas(lista);
+    Moneda moneda;
     
-    vectorP moneda = NULL, solucion = NULL, stock = NULL;
+    cargarMonedas(&lista);
+    
+    vectorP solucion = NULL, stock = NULL;
 
     do {
         printf("\nModo de Operacion");
@@ -54,57 +58,25 @@ int main(int argc, char** argv) {
                 do {
                     printf("\nSeleccionar Tipo de Moneda");
                     printf("\n==========================");
-                    printf("\n1)Euro");
-                    printf("\n2)Dolar");
-                    printf("\n3)Yen");
+                    p=primero(lista);
+
+                    recupera(lista,p,&moneda);
+                    if(moneda != NULL){
+                        pos=1;
+                        printf("\n%d) %s",pos,getName(*&moneda));
+                        
+/*
+                        do{
+                            pos++;
+                            recupera(lista,p,&moneda);
+                            printf("\n%d)%s",pos,getName(moneda));
+                        }while((p=siguiente(lista,p)) != NULL);
+*/
+                    }
                     printf("\n0)Salir");
                     printf("\nOpcion: ");
                     scanf(" %c", &opt); //corregir fallo no menu
                     getchar();
-
-                    //monActual = (sizeof (monedas) / sizeof (char)) / (sizeof (monedas[0]) / sizeof (char)); //variable que gestiona que elemento do array que maneja os tipos de mona estamos usando
-
-                    if (moneda != NULL)
-                        liberar(&moneda);
-
-                    if (solucion != NULL)
-                        liberar(&solucion);
-
-                    if (stock != NULL)
-                        liberar(&stock);
-
-                    switch (opt) {
-                        case '1'://euro
-                            crear(&moneda, 8);
-                            //leerCarasMoneda("euro",&moneda);
-                            crear(&solucion, 8);
-                            if (!inf)
-                                crear(&stock, 8);
-                            
-                            break;
-                        case '2'://dolar
-                            crear(&moneda, 4);
-                            //leerCarasMoneda("dolar",&moneda);
-                            crear(&solucion, 4);
-                            if (!inf)
-                                crear(&stock, 4);
-                            
-                            break;
-                        case '3'://yen
-                            crear(&moneda, 6);
-                            //leerCarasMoneda("yen",&moneda);
-                            crear(&solucion, 6);
-                            if (!inf)
-                                crear(&stock, 6);
-
-                            break;
-
-                            //printf("\nMoneda Seleccionada: %s \n",monedas[monActual-strtol(opt,NULL,10)]);
-
-                        default:
-
-                            break;
-                    }
 
                     while (0 != (cantidad = solicitarMonedas()) && opt != '0') {
                         cambio(cantidad, moneda, &solucion, NULL);
@@ -240,6 +212,7 @@ void imprimirVector(vectorP vec) {
 
 void cargarMonedas(TLISTA *lista){
     FILE *fp;
+    POSICION p;
     int end,size,i,aux;
     char *linea,*nombre,*valor;
     char buffer[LONG_MAX_LINE];
@@ -252,7 +225,8 @@ void cargarMonedas(TLISTA *lista){
             TCOLA temp;
             ColaVacia(&temp);
             Moneda moneda;        
-    
+            crearMoneda(&moneda);
+            
             linea=fgets(buffer,LONG_MAX_LINE,fp);
              
             nombre = strtok( linea, separador );    // Primera llamada => Primer token
@@ -272,11 +246,12 @@ void cargarMonedas(TLISTA *lista){
                 asignar(&caras,i,aux);
                 EliminarCola(&temp);
             }
-            
+                     
             setCaras(&moneda,caras);
             
-            inserta(lista,fin(lista),moneda);
-        }while(end != EOF);
+            p=fin(*lista);
+            inserta(lista,p,moneda);
+        }while(!feof(fp));
     }else{
         
     }

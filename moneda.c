@@ -1,31 +1,50 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "vectordinamico.h"
 
-typedef struct{
+typedef struct {
     char *nombre;
     vectorP caras;
     vectorP stock;
-} Moneda;
+} structMoneda;
 
-char *getName(Moneda moneda){
-    return moneda.nombre;
+typedef structMoneda *Moneda;
+
+void crearMoneda(Moneda *moneda){
+    *moneda=(structMoneda *) malloc(sizeof (structMoneda *));
 }
 
-void setName(Moneda *moneda,char* nombre){
-    moneda->nombre=nombre;
+char *getName(Moneda moneda) {
+    return (moneda)->nombre;
 }
 
-vectorP *getStock(Moneda moneda){
-    return (moneda.stock);
+void setName(Moneda *moneda, char* nombre) {
+    (*moneda)->nombre = nombre;
 }
 
-void setStock(Moneda *moneda,vectorP stock){
-    moneda->stock=stock;
+vectorP *getStock(Moneda moneda) {
+    return (*moneda).stock;
 }
 
-vectorP *getCaras(Moneda moneda){
-    return moneda.caras;
+void setStock(Moneda *moneda, vectorP stock) {
+    (*moneda)->stock = stock;
 }
 
-void setCaras(Moneda *moneda,vectorP caras){
-    moneda->caras=caras;
+vectorP *getCaras(Moneda moneda) {
+    return (*moneda).caras;
+}
+
+void setCaras(Moneda *moneda, vectorP caras) {
+    (*moneda)->caras = caras;
+}
+
+void liberarMoneda(Moneda *moneda) {
+    if ((*moneda)->caras != NULL) {
+        liberar((*moneda)->caras);
+        (*moneda)->caras = NULL;
+    }
+    if ((*moneda)->stock != NULL) {
+        liberar((*moneda)->stock);
+        (*moneda)->caras = NULL;
+    }
 }
