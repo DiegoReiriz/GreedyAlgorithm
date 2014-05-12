@@ -24,13 +24,14 @@ int solicitarMonedas();
 void imprimirVector(vectorP vec);
 int cambio(int x, vectorP valor, vectorP *solucion, vectorP *stock);
 void escribirMonedas();
-int cargarMonedas(Moneda moneda[10]);
 int cargarStock(Moneda moneda[10]);
+void escribirStock(Moneda moneda[10], int cantidad);
+void gestionarStock(Moneda *moneda);
 
 int main(int argc, char** argv) {
 
     int cantidad, pos, numMonedas;
-    char opt, inf;
+    char opt, inf, optInf;
 
     Moneda moneda[10];
 
@@ -75,7 +76,25 @@ int main(int argc, char** argv) {
 
                     } while (opt < 0 || opt > (cantidad + 1));
 
-                    while (opt != 0 && 0 != (numMonedas = solicitarMonedas())) {
+                    optInf = '1';
+                    
+                    if (!inf) {
+                        printf("\nSelecciona unha opcion");
+                        printf("\n======================");
+                        printf("\n1)insertar  numero");
+                        printf("\n2)aumentar stock");
+                        do {
+                            printf("\nOpcion: ");
+                            scanf(" %c", &optInf); //corregir fallo no menu
+
+                        } while (optInf < '1' || optInf > '2');
+
+                        if (optInf == '2'){
+                            gestionarStock(&moneda[opt - 1]);
+                        }
+                    }
+
+                    while (optInf == '1' && opt != 0 && 0 != (numMonedas = solicitarMonedas())) {
 
                         if (cambio(numMonedas, moneda[opt - 1].caras, &solucion, (moneda[opt - 1].stock))) {
                             imprimirVector(moneda[opt - 1].caras);
@@ -88,8 +107,11 @@ int main(int argc, char** argv) {
                             printf("\nNon se pudo dar o cambio");
                         }
                     }
-                } while (opt != 0);
 
+                } while (opt != 0);
+                if (!inf) {
+                    escribirStock(moneda, cantidad);
+                }
                 opt = -1;
 
                 break;
@@ -279,8 +301,6 @@ int cargarStock(Moneda moneda[10]) {
 
             nombre = strtok(linea, separador); // Primera llamada => Primer token
 
-
-
             end = 0;
             while ((valor = strtok(NULL, separador)) != NULL) { // Posteriores llamadas
                 AnadirCola(&temp, strtol(valor, NULL, 10));
@@ -304,4 +324,34 @@ int cargarStock(Moneda moneda[10]) {
     }
     fclose(fp);
     return cantidad;
+}
+
+void escribirStock(Moneda moneda[10], int cantidad) {
+    FILE *fp;
+    TELEMENTO elem;
+    int tam, i = 0, j = 0;
+
+    if ((fp = fopen("stock.txt", "w+")) != NULL) {
+        do {
+            fprintf(fp, "%s", moneda[i].nombre);
+            tamano(moneda[i].stock, &tam);
+            for (j = 0; j < tam; j++) {
+                recuperar(moneda[i].stock, j, &elem);
+                fprintf(fp, ",%d", elem);
+            }
+            fprintf(fp, "\n");
+            i++;
+        } while (i <= cantidad);
+    }
+}
+
+void gestionarStock(Moneda *moneda){
+    vectorP stock=moneda->stock,caras=moneda->caras;
+    int aux;
+    
+    tamano(stock,&aux);
+    printf("\n%d",aux);
+    tamano(caras,&aux);
+    printf("\n%d",aux);
+
 }

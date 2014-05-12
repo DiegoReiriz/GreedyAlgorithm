@@ -1,4 +1,5 @@
-euro,2,2,2,2,2,2,2,2
-dolar,2,2,2,2
-yen,2,2,2,2,2,2
-lele,2,2
+euro
+dolar
+yen
+lele
+p'€

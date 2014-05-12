@@ -1,0 +1,29 @@
+diff a/stock.txt b/stock.txt	(rejected hunks)
+@@ -1,21 +1,4 @@
+-m: euro
+-c: 0
+-c: 0
+-c: 0
+-c: 0
+-c: 0
+-c: 0
+-c: 0
+-c: 0
+-m: dolar
+-c: 0
+-c: 0
+-c: 0
+-c: 0
+-m: yen
+-c: 0
+-c: 0
+-c: 0
+-c: 0
+-c: 0
+-c: 0
+\ No newline at end of file
++euro,2,2,2,2,2,2,2,2
++dolar,2,2,2,2
++yen,2,2,2,2,2,2
++lele,2,2
+\ No newline at end of file
